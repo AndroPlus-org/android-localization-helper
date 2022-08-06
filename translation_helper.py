@@ -237,7 +237,9 @@ def getLangDir(dir_name):
     if dir_name[2:].startswith('values-'):
         code = [dir_name[9:]][0]
         if (len(code) == 2) or (len(code) == 5 and code[2] == '-') \
-                or (len(code) == 6 and code[2] == '-'):
+                or (len(code) == 6 and code[2] == '-') \
+                or ('port' in code and code[2] == '-') \
+                or ('land' in code and code[2] == '-'):
             return code
 
     # not a language dir
