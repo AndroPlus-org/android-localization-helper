@@ -30,7 +30,7 @@ TRANS_STRING_FILE = 'strings.xml'
 def main():
 
     # parse command line arguments
-    res_path, clean, out_path, inputs = parseArgs()
+    res_path, clean, out_path, inputs, nooutput = parseArgs()
     if not inputs:
         inputs = [DEFAULT_STRING_FILE]
     print('Using %s for default string file(s)' % inputs)
@@ -65,8 +65,9 @@ def main():
         cleanTranslationFiles(langs, keys, res_path)
 
     # write files for missing keys for each language
-    createOutputDir(out_path)
-    writeMissingKeysToFiles(langs, tags, missing, out_path)
+    if not (nooutput):
+        createOutputDir(out_path)
+        writeMissingKeysToFiles(langs, tags, missing, out_path)
 
     print('Saved missings strings to: %s' % out_path)
 
@@ -93,8 +94,13 @@ def parseArgs(args=None):
                         'translation files to match the default string '
                         'ordering',
                         action="store_true")
+    parser.add_argument('--nooutput',
+                        help='re-orders and removes strings in the '
+                        'translation files to match the default string '
+                        'ordering',
+                        action="store_true")
     args = parser.parse_args(args) if args is not None else parser.parse_args()
-    return args.res, args.clean, args.output, args.input
+    return args.res, args.clean, args.output, args.input, args.nooutput
 
 
 def getDefaultTrees(res_path, flist):
